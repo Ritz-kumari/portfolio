@@ -2,13 +2,12 @@ import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } fro
 import { AnimatePresence, motion, MotionConfig } from 'motion/react'
 import {
   ArrowDown, ArrowDownToLine, ArrowUpRight, Braces, Check,
-  ChevronRight, Cloud, Code2, Database, Globe2, Layers3,
+  ChevronRight, Cloud, Code2, Database, Dumbbell, Globe2, Layers3,
   MapPin, Menu, Minus, Pause, Phone, Play, Plus, ShieldCheck, Sparkles, X,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { projects, skills, experience } from './content'
 import type { Project } from './content'
-import SectionCursor from './SectionCursor'
 import './App.css'
 
 const SystemsScene = lazy(() => import('./SystemsScene'))
@@ -79,7 +78,8 @@ function HeroVisual() {
       </div>
       <div className="orbit-label orbit-label-frontend"><span className="label-dot orange" />frontend<span className="label-code">&lt;/&gt;</span></div>
       <div className="orbit-label orbit-label-backend"><span className="label-dot purple" />backend<Database size={13} /></div>
-      <div className="orbit-label orbit-label-cloud"><span className="label-dot green" />cloud<Cloud size={15} /></div>
+      <div className="orbit-label orbit-label-devops"><span className="label-dot green" />DevOps<Layers3 size={15} /></div>
+      <div className="orbit-label orbit-label-ai"><span className="label-dot pink" />AI<Sparkles size={15} /></div>
       <div className="visual-bottomline">
         <span><span className="live-dot" /> {reducedMotion ? 'A quieter orbit. Same perspective.' : 'Move your cursor. Find a new perspective.'}</span>
         {!reducedMotion && (
@@ -131,17 +131,36 @@ function ProjectPreview({ project }: { project: Project }) {
       </div>
     )
   }
+  if (project.id === 'gym') {
+    return (
+      <div className="project-preview gym-preview" aria-hidden="true">
+        <div className="preview-overline"><Dumbbell size={16} /> GYM MANAGEMENT & FITNESS TRACKING</div>
+        <div className="gym-window">
+          <strong>UFit</strong>
+          <p>Run your gym. Track your progress.</p>
+          <div className="gym-window-roles">
+            <div><b>Gym owners</b><span>Members & memberships</span></div>
+            <div><b>Members</b><span>Workouts & nutrition</span></div>
+          </div>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="project-preview cloud-preview" aria-hidden="true">
       <div className="preview-overline"><Cloud size={16} /> YOUR SPACE. YOUR RULES.</div>
       <div className="storage-window">
-        <div className="storage-header"><span className="storage-brand"><Cloud size={19} />cloudspace<span>Personal project</span></span><span className="storage-avatar">RK</span></div>
+        <div className="storage-header"><span className="storage-brand"><Cloud size={19} />Storage App<span>Personal project</span></span><span className="storage-avatar">RK</span></div>
         <div className="storage-title">A little more room<br />for your big ideas.</div>
         <div className="folder-row">{['Work', 'Ideas', 'Personal'].map((folder, index) => <div key={folder} className={`folder folder-${index}`}><span className="folder-tab" /><span className="folder-front"><span>{folder}</span><span>{['12', '08', '24'][index]} files</span></span></div>)}</div>
         <div className="storage-footer"><ShieldCheck size={13} /><span>Private by default. Isolated by design.</span><span className="storage-status">RBAC</span></div>
       </div>
     </div>
   )
+}
+
+function ProjectLiveLink({ url }: { url: string }) {
+  return <a className="project-live-link" href={url}>Live app <ArrowUpRight size={17} aria-hidden="true" /></a>
 }
 
 function ProjectDialog({ project, onClose }: { project: Project; onClose: () => void }) {
@@ -179,16 +198,33 @@ function ProjectDialog({ project, onClose }: { project: Project; onClose: () => 
         if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) onClose()
       }
     }}>
-      <button className="dialog-close icon-button" onClick={onClose} aria-label="Close case study" autoFocus><X size={20} /></button>
-      <span className="eyebrow">{project.category} / {project.context}</span>
-      <h2 id="dialog-title">{project.title}</h2>
-      <p className="dialog-intro">{project.description}</p>
-      <div className="dialog-metric"><ArrowUpRight size={28} /><span>{project.metric}<small>{project.metricLabel}</small></span></div>
-      <h3>The engineering behind the impact</h3>
-      <ul className="case-study-points">{project.details.map((detail) => <li key={detail}><Check size={17} /><span>{detail}</span></li>)}</ul>
-      <div className="tag-list">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
-      <p className="project-disclaimer">{project.id === 'cloud' ? 'Personal project. Performance optimization is in progress ahead of cloud deployment.' : 'Enterprise work at Alvarez & Marsal. Visuals are illustrative; no client data or proprietary screenshots are shown.'}</p>
-      <a href="mailto:rk6301471@gmail.com" className="text-link">Let’s talk about the architecture <ArrowUpRight size={16} /></a>
+      <header className="dialog-header">
+        <span className="eyebrow">{project.category} / {project.context}</span>
+        <button className="icon-button" onClick={onClose} aria-label="Close project details" autoFocus><X size={20} /></button>
+      </header>
+      <div className="dialog-content">
+        <h2 id="dialog-title">{project.title}</h2>
+        <p className="dialog-intro">{project.description}</p>
+        {project.liveUrl && <ProjectLiveLink url={project.liveUrl} />}
+        <section className="dialog-section">
+          <h3>Problem it solves</h3>
+          <p>{project.problem}</p>
+        </section>
+        <section className="dialog-section">
+          <h3>What I built</h3>
+          <ul className="case-study-points">{project.details.map((detail) => <li key={detail}>{detail}</li>)}</ul>
+        </section>
+        <section className="dialog-section">
+          <h3>Tech stack</h3>
+          <div className="tag-list">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+        </section>
+        {project.category === 'Enterprise' && (
+          <section className="dialog-section">
+            <h3>Impact</h3>
+            <p><strong>{project.metric}</strong><br />{project.metricLabel}</p>
+          </section>
+        )}
+      </div>
     </dialog>
   )
 }
@@ -226,7 +262,6 @@ function App() {
   return (
     <MotionConfig reducedMotion={reducedMotion ? 'always' : 'never'}>
       <a className="skip-link" href="#main">Skip to content</a>
-      <SectionCursor reducedMotion={reducedMotion} disabled={selectedProject !== null} />
       <header className="site-header">
         <div className="header-inner">
           <a href="#home" className="wordmark" aria-label="Ritu Kumari, home"><span className="wordmark-name">Ritu<span className="wordmark-dot">.</span></span><span className="wordmark-suffix"><span>FULL STACK</span><span>DEVELOPER</span></span></a>
@@ -259,6 +294,25 @@ function App() {
           <div className="hero-bottom"><span>CREATIVE THINKING. ENGINEERING PRECISION.</span><a href="#work">A little further down <ArrowDown size={13} /></a></div>
         </section>
 
+        <section className="tech-overview section-container" id="tech-stack" aria-labelledby="tech-stack-title">
+          <Reveal className="stack-heading">
+            <div><span className="eyebrow">MY TOOLKIT</span><h2 id="tech-stack-title">What I work with</h2></div>
+          </Reveal>
+          <div className="skills-grid">
+            {skills.map((group, index) => {
+              const Icon = [Code2, Database, Layers3, Sparkles][index]
+              return (
+                <Reveal key={group.title} delay={index * 0.05} className="skill-card">
+                  <h3><Icon size={20} aria-hidden="true" />{group.title}</h3>
+                  <p>{group.description}</p>
+                  <div className="skill-tags">{group.items.map((item) => <span key={item}>{item}</span>)}</div>
+                </Reveal>
+              )
+            })}
+          </div>
+          <Reveal className="ai-note"><span className="ai-note-icon"><Sparkles size={18} /></span><span><strong>AI-assisted development:</strong> GitHub Copilot, Cursor, and Claude.</span></Reveal>
+        </section>
+
         <section className="impact-strip section-container" aria-label="Career impact">
           <Reveal className="impact-intro"><span className="eyebrow">LESS TALK.</span><span>Real-world impact.</span></Reveal>
           {[['4+', 'Years of experience'], ['10+', 'Live enterprise clients'], ['6+', 'Supported jurisdictions'], ['< 1 hr', 'Tax reporting turnaround']].map(([value, label], index) => <Reveal className="impact-stat" key={label} delay={index * 0.04}><strong>{value}</strong><span>{label}</span></Reveal>)}
@@ -270,7 +324,7 @@ function App() {
             <p>A few things I’ve built.<br />And the difference they’ve made.</p>
           </Reveal>
           <div className="work-toolbar">
-            <div className="work-filters" role="group" aria-label="Filter selected work">{['All work', 'Enterprise', 'Personal'].map((category) => <button key={category} className={filter === category ? 'selected' : ''} aria-pressed={filter === category} onClick={() => setFilter(category)}>{category}{category === 'All work' && <span>03</span>}</button>)}</div>
+            <div className="work-filters" role="group" aria-label="Filter selected work">{['All work', 'Enterprise', 'Personal'].map((category) => <button key={category} className={filter === category ? 'selected' : ''} aria-pressed={filter === category} onClick={() => setFilter(category)}>{category}{category === 'All work' && <span>{String(projects.length).padStart(2, '0')}</span>}</button>)}</div>
             <span className="work-count" aria-live="polite">{String(filteredProjects.length).padStart(2, '0')} projects</span>
           </div>
           <div className="projects-grid">
@@ -282,7 +336,10 @@ function App() {
                   <h3>{project.title}</h3>
                   <p>{project.description}</p>
                   <div className="tag-list">{project.tags.slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}</div>
-                  <div className="project-card-bottom"><span className="project-result"><ArrowUpRight size={17} />{project.shortMetric}</span><button className="project-open" onClick={() => setSelectedProject(project)} aria-label={`Read case study: ${project.title}`}><ArrowUpRight size={23} /></button></div>
+                  <div className="project-card-bottom">
+                    {project.liveUrl ? <ProjectLiveLink url={project.liveUrl} /> : <span className="project-result">{project.shortMetric}</span>}
+                    <button className="project-open" onClick={() => setSelectedProject(project)} aria-label={`Project details: ${project.title}`}>Project details <ChevronRight size={17} aria-hidden="true" /></button>
+                  </div>
                 </div>
               </Reveal>
             ))}
@@ -317,19 +374,21 @@ function App() {
             <Reveal className="about-art"><div className="about-monogram" aria-hidden="true"><span>r</span><span>k</span><span className="monogram-star">✳</span><span className="monogram-caption">CURIOUS MIND.<br />BUILDER AT HEART.</span></div><div className="location-label"><MapPin size={14} /> Based in Delhi NCR, India <Globe2 size={14} /></div></Reveal>
             <Reveal className="about-copy"><span className="eyebrow"><span className="section-index">03 /</span> THE HUMAN BEHIND THE CODE</span><h2>A little curiosity.<br /><span className="serif">A lot of possibility.</span></h2><p>I’m Ritu, a full stack developer who enjoys connecting the dots between great interfaces and the systems that power them.</p><p>My sweet spot? Taking something complicated—multi-tenant architecture, secure access control, or a messy data pipeline—and making it feel effortless. I care about the details, but never lose sight of the bigger picture.</p><div className="about-principles"><span><Check size={14} /> Security-first thinking</span><span><Check size={14} /> End-to-end ownership</span><span><Check size={14} /> Built to scale</span></div><div className="education"><span className="education-icon"><Code2 size={20} /></span><span><strong>Indian Institute of Information Technology, Ranchi</strong><span>B.Tech · Electronics & Communication Engineering</span><small>2018 — 2022 · GPA 9.1 / 10 · Training & Placement Coordinator</small></span></div></Reveal>
           </div>
-          <Reveal className="stack-heading"><div><span className="eyebrow">MY TOOLKIT</span><h3>The right tools. <span className="serif">The right foundations.</span></h3></div><span className="stack-note">Always learning. Never standing still. <Sparkles size={15} /></span></Reveal>
-          <div className="skills-grid">{skills.map((group, index) => {
-            const Icon = [Code2, Database, Cloud, ShieldCheck][index]
-            return <Reveal key={group.title} delay={index * 0.05} className="skill-card"><div className="skill-card-heading"><Icon size={21} /><span>0{index + 1}</span></div><h4>{group.title}</h4><div className="skill-tags">{group.items.map((item) => <span key={item}>{item}</span>)}</div></Reveal>
-          })}</div>
-          <Reveal className="ai-note"><span className="ai-note-icon"><Sparkles size={18} /></span><span><strong>Human-led. AI-assisted.</strong> I use GitHub Copilot, Cursor, and Claude to accelerate development—not replace thoughtful engineering.</span><ArrowUpRight size={19} /></Reveal>
         </section>
 
         <section id="contact" className="contact-section">
           <div className="section-container">
             <Reveal className="contact-top"><span className="eyebrow"><span className="section-index">04 /</span> NEXT UP</span><span className="contact-location"><span className="live-dot" /> DELHI NCR, INDIA · OPEN TO CONVERSATIONS</span></Reveal>
             <Reveal className="contact-main"><div><h2>Have a big idea?<br /><span className="serif">Let’s make it real.</span><span className="contact-star" aria-hidden="true">✳</span></h2><p>Interesting challenges. Thoughtful teams. Ambitious projects.<br />I’d love to hear what you’re working on.</p></div><a className="contact-circle" href="mailto:rk6301471@gmail.com" aria-label="Email Ritu Kumari"><ArrowUpRight strokeWidth={1.2} /></a></Reveal>
-            <Reveal className="contact-links"><a href="mailto:rk6301471@gmail.com" className="contact-email">rk6301471@gmail.com <ArrowUpRight size={23} /></a><div><a href="https://www.linkedin.com/in/kumari-ritz" target="_blank" rel="noopener noreferrer"><span className="linkedin-mark" aria-hidden="true">in</span>LinkedIn<ArrowUpRight size={14} /></a><a href={resumeUrl} download="Ritu_Kumari_Resume.docx"><ArrowDownToLine size={16} />Resume<ArrowUpRight size={14} /></a><a href="tel:+916206815310"><Phone size={16} />Let’s connect<ArrowUpRight size={14} /></a></div></Reveal>
+            <Reveal className="contact-links">
+              <a href="mailto:rk6301471@gmail.com" className="contact-email">rk6301471@gmail.com <ArrowUpRight size={23} /></a>
+              <div>
+                <a href="https://www.linkedin.com/in/kumari-ritz" target="_blank" rel="noopener noreferrer"><span className="linkedin-mark" aria-hidden="true">in</span>LinkedIn<ArrowUpRight size={14} /></a>
+                <a href="https://github.com/Ritz-kumari?tab=repositories" target="_blank" rel="noopener noreferrer"><Code2 size={16} aria-hidden="true" />GitHub<ArrowUpRight size={14} aria-hidden="true" /></a>
+                <a href={resumeUrl} download="Ritu_Kumari_Resume.docx"><ArrowDownToLine size={16} />Resume<ArrowUpRight size={14} /></a>
+                <a href="tel:+916206815310"><Phone size={16} />Let’s connect<ArrowUpRight size={14} /></a>
+              </div>
+            </Reveal>
           </div>
         </section>
       </main>
