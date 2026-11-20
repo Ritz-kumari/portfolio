@@ -118,6 +118,29 @@ function ProjectPreview({ project }: { project: Project }) {
       </div>
     )
   }
+  if (project.id === 'fpi') {
+    return (
+      <div className="project-preview fpi-preview" aria-hidden="true">
+        <div className="preview-overline"><Layers3 size={15} /> FOREIGN PORTFOLIO INVESTOR TAXATION</div>
+        <div className="fpi-window">
+          <div className="fpi-window-bar">
+            <span>INVESTOR OPERATIONS</span>
+            <span><i className="fpi-status-dot" /> WORKFLOWS CONNECTED</span>
+          </div>
+          <div className="fpi-workflow-grid">
+            <div><span>01</span><strong>Tax</strong><small>Compute &amp; report</small></div>
+            <div><span>02</span><strong>Transactions</strong><small>Investments &amp; income</small></div>
+            <div><span>03</span><strong>Corporate actions</strong><small>Review &amp; process</small></div>
+          </div>
+          <div className="fpi-lower">
+            <span className="fpi-pill"><ShieldCheck size={13} /> Approvals &amp; audit</span>
+            <span className="fpi-shared-core">SHARED JAVA CORE</span>
+          </div>
+        </div>
+        <div className="preview-caption"><span>Six services.</span><span>One connected platform. <ArrowUpRight size={14} /></span></div>
+      </div>
+    )
+  }
   if (project.id === 'insights') {
     return (
       <div className="project-preview insights-preview" aria-hidden="true">
@@ -329,7 +352,7 @@ function App() {
           </div>
           <div className="projects-grid">
             {filteredProjects.map((project) => (
-              <Reveal key={project.id} className={`project-card ${project.id === 'tax' ? 'project-featured' : ''}`}>
+              <Reveal key={project.id} className={`project-card ${['tax', 'fpi'].includes(project.id) ? 'project-featured' : ''}`}>
                 <ProjectPreview project={project} />
                 <div className="project-information">
                   <div className="project-meta"><span>{project.number} / {project.category.toUpperCase()}</span><span>{project.context}</span></div>
