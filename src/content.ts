@@ -113,7 +113,7 @@ export const projects: Project[] = [
     details: [
       'Owner dashboard: Review member records and upcoming expirations, renew memberships, and manage which members have access to personal training.',
       'Member onboarding: Owners can create and revoke invite codes. The app includes email delivery through Resend; sending invites to other addresses requires a verified sender domain.',
-      'Training plans: Owners can assign plans, and members can set fitness goals and generate a weekly workout plan. The optional AI generator validates the plan before saving it.',
+      'AI-assisted training plans: Members can set fitness goals and generate a weekly workout plan; the optional AI generator validates the plan before saving it.',
       'Fitness tracking: Members log workouts and meals, mark sessions complete, and estimate calories burned from completed workouts.',
       'Progress tracking: Members record check-ins and body measurements and view changes over time.',
       'Authentication: Implemented owner and member registration and login with bcrypt password hashing and signed JWT bearer access tokens.',
@@ -184,7 +184,7 @@ export const skills = [
   },
   {
     title: 'Generative AI',
-    description: 'I work with language models, RAG pipelines, chatbots, and reusable agent skills. I’ve used LLMs to summarize business data and generate structured workout plans that the app validates before saving.',
-    items: ['LLM integration', 'Prompt engineering', 'Retrieval-augmented generation (RAG)', 'Chatbot development', 'Reusable agent skills', 'Structured outputs', 'Response validation'],
+    description: 'I use LLMs to generate business insights and comparative summaries, and to create workout plans that the app validates before saving. I also create reusable workflow skills for GitHub Copilot.',
+    items: ['LLM integration', 'Prompt engineering', 'Retrieval-augmented generation (RAG)', 'Chatbot development', 'AI business insights', 'AI workout-plan generation', 'Structured outputs', 'Response validation', 'GitHub Copilot workflow skills'],
   },
 ]

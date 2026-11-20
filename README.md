@@ -36,9 +36,11 @@ API keys, or environment variables are required.
   hero is off-screen or the tab is hidden.
 - Static fallback with an explicit message when WebGL is unsupported.
 - Homepage toolkit for Frontend, Backend, DevOps, and Generative AI.
+- Applied AI use cases for business insights and validated workout plans, plus
+  reusable GitHub Copilot workflow skills.
 - Filterable case studies with accessible native dialogs and an expandable career timeline.
 - Responsive mobile navigation, keyboard focus states, self-hosted fonts, and
-  email, phone, LinkedIn, GitHub, and original Word resume links.
+  email, phone, LinkedIn, GitHub, and downloadable Word resume links.
 
 ## Update content
 

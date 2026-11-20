@@ -333,7 +333,7 @@ function App() {
               )
             })}
           </div>
-          <Reveal className="ai-note"><span className="ai-note-icon"><Sparkles size={18} /></span><span><strong>AI-assisted development:</strong> GitHub Copilot, Cursor, and Claude.</span></Reveal>
+          <Reveal className="ai-note"><span className="ai-note-icon"><Sparkles size={18} /></span><span><strong>AI & Copilot workflows:</strong> LLM-powered business insights, validated workout plans, and reusable GitHub Copilot workflow skills. AI-assisted development with Copilot, Cursor, and Claude.</span></Reveal>
         </section>
 
         <section className="impact-strip section-container" aria-label="Career impact">
